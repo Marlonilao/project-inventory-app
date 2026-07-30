@@ -1,0 +1,27 @@
+{
+  "name": "project-inventory-app",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "dev": "node --watch index.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Marlonilao/project-inventory-app.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Marlonilao/project-inventory-app/issues"
+  },
+  "homepage": "https://github.com/Marlonilao/project-inventory-app#readme",
+  "dependencies": {
+    "ejs": "^6.0.1",
+    "express": "^5.2.1",
+    "express-validator": "^7.3.2",
+    "pg": "^8.22.0"
+  }
+}
