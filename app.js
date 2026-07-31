@@ -1,8 +1,8 @@
+require('dotenv').config();
+
 const express = require('express');
 const path = require('node:path');
 const app = express();
-
-const PORT = 3000;
 
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'ejs');
@@ -12,12 +12,16 @@ app.get('/', (req, res) => {
   res.send('Hello World!');
 });
 
+app.use((req, res) => {
+  res.status(404).render('error', { message: 'Page not found.' });
+});
+
 app.use((err, req, res, next) => {
   console.error(err);
-  res
-    .status(err.statusCode || 500)
-    .send(err.message || 'Internal Server Error');
+  res.status(500).render('error', { message: 'Something went wrong.' });
 });
+
+const PORT = process.env.PORT || 3000;
 
 app.listen(PORT, (error) => {
   if (error) {
