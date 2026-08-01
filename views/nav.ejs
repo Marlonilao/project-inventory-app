@@ -1,0 +1,46 @@
+<nav class="navbar navbar-expand-lg bg-dark border-bottom" data-bs-theme="dark">
+  <div class="container">
+    <a class="navbar-brand fw-semibold" href="/">
+      <i class="bi bi-shop me-1"></i>Tindahan
+    </a>
+
+    <button
+      class="navbar-toggler"
+      type="button"
+      data-bs-toggle="collapse"
+      data-bs-target="#mainNav"
+      aria-controls="mainNav"
+      aria-expanded="false"
+      aria-label="Toggle navigation"
+    >
+      <span class="navbar-toggler-icon"></span>
+    </button>
+
+    <div class="collapse navbar-collapse" id="mainNav">
+      <ul class="navbar-nav me-auto">
+        <li class="nav-item"><a class="nav-link" href="/">Categories</a></li>
+        <li class="nav-item"><a class="nav-link" href="/items">All items</a></li>
+        <li class="nav-item">
+          <a class="nav-link" href="/items/low-stock">Needs restocking</a>
+        </li>
+      </ul>
+
+      <!-- GET, not POST: a search is a bookmarkable read, and the term
+           belongs in the URL so the back button works. -->
+      <form class="d-flex me-lg-3 my-2 my-lg-0" role="search" action="/items" method="get">
+        <input
+          class="form-control form-control-sm"
+          type="search"
+          name="search"
+          placeholder="Search items"
+          aria-label="Search items"
+          value="<%= typeof search !== 'undefined' ? search : '' %>"
+        />
+      </form>
+
+      <a class="btn btn-sm btn-warning" href="/items/new">
+        <i class="bi bi-plus-lg me-1"></i>Add item
+      </a>
+    </div>
+  </div>
+</nav>

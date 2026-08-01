@@ -10,7 +10,17 @@ const items = require('./controllers/itemController');
 
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'ejs');
+
+app.locals.peso = (value) => {
+  if (value === null || value === undefined || value === '') {
+    return '—';
+  }
+
+  return `₱${Number(value).toFixed(2)}`;
+};
+
 app.use(express.urlencoded({ extended: true }));
+app.use(express.static(path.join(__dirname, 'public')));
 
 app.get('/', categories.homeGet);
 app.use('/categories', categoryRouter);

@@ -1,0 +1,36 @@
+/* Bootstrap does the work. This only covers what utilities cannot. */
+
+:root {
+  --bs-body-font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+}
+
+/* stretched-link on the card footer makes the whole card clickable,
+   so give the card the affordance to match. */
+.card a.stretched-link:focus-visible::after {
+  outline: 2px solid var(--bs-primary);
+  outline-offset: 2px;
+  border-radius: var(--bs-border-radius);
+}
+
+.card:has(a.stretched-link):hover {
+  transform: translateY(-2px);
+}
+
+.card:has(a.stretched-link) {
+  transition: transform 0.15s ease;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .card:has(a.stretched-link) {
+    transition: none;
+  }
+
+  .card:has(a.stretched-link):hover {
+    transform: none;
+  }
+}
+
+/* Tabular figures keep the peso column from jittering between rows. */
+.table td.text-end {
+  font-variant-numeric: tabular-nums;
+}

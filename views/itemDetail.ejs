@@ -1,0 +1,138 @@
+<%- include('partials/head') %>
+<%- include('partials/nav') %>
+
+<%
+  // pg returns NUMERIC as a string, so coerce before doing arithmetic —
+  // "42.00" - "36.00" happens to work, but "42.00" + "36.00" would not.
+  const price = Number(item.price);
+  const cost = item.cost === null ? null : Number(item.cost);
+  const margin = cost === null ? null : price - cost;
+  const marginPercent = margin === null || price === 0 ? null : (margin / price) * 100;
+%>
+
+<main class="container py-4">
+  <nav aria-label="breadcrumb">
+    <ol class="breadcrumb small">
+      <li class="breadcrumb-item"><a href="/items">Items</a></li>
+      <li class="breadcrumb-item active" aria-current="page"><%= item.name %></li>
+    </ol>
+  </nav>
+
+  <div class="row g-3">
+    <div class="col-lg-7">
+      <div class="card border-0 shadow-sm h-100">
+        <div class="card-body">
+          <div class="d-flex justify-content-between align-items-start gap-2 mb-3">
+            <div>
+              <h1 class="h4 mb-1"><%= item.name %></h1>
+              <% if (item.category_name) { %>
+                <a
+                  class="badge text-bg-light border text-decoration-none"
+                  href="/categories/<%= item.category_id %>"
+                >
+                  <%= item.category_name %>
+                </a>
+              <% } else { %>
+                <span class="badge text-bg-secondary">Uncategorized</span>
+              <% } %>
+            </div>
+
+            <%- include('partials/stockBadge', { item }) %>
+          </div>
+
+          <dl class="row mb-0">
+            <dt class="col-5 col-sm-4 fw-normal text-body-secondary">Selling price</dt>
+            <dd class="col-7 col-sm-8 fw-medium"><%= peso(item.price) %> / <%= item.unit %></dd>
+
+            <dt class="col-5 col-sm-4 fw-normal text-body-secondary">Buying cost</dt>
+            <dd class="col-7 col-sm-8"><%= peso(item.cost) %></dd>
+
+            <dt class="col-5 col-sm-4 fw-normal text-body-secondary">Margin</dt>
+            <dd class="col-7 col-sm-8">
+              <% if (margin === null) { %>
+                <span class="text-body-secondary">No cost recorded</span>
+              <% } else { %>
+                <%= peso(margin) %>
+                <span class="text-body-secondary small">
+                  (<%= marginPercent.toFixed(1) %>%)
+                </span>
+              <% } %>
+            </dd>
+
+            <dt class="col-5 col-sm-4 fw-normal text-body-secondary">On hand</dt>
+            <dd class="col-7 col-sm-8"><%= item.quantity %> <%= item.unit %>(s)</dd>
+
+            <dt class="col-5 col-sm-4 fw-normal text-body-secondary">Restock at</dt>
+            <dd class="col-7 col-sm-8"><%= item.low_stock_at %></dd>
+
+            <dt class="col-5 col-sm-4 fw-normal text-body-secondary">Last updated</dt>
+            <dd class="col-7 col-sm-8 mb-0">
+              <%= new Date(item.updated_at).toLocaleString("en-PH") %>
+            </dd>
+          </dl>
+        </div>
+
+        <div class="card-footer bg-transparent d-flex gap-2">
+          <a class="btn btn-sm btn-outline-secondary" href="/items/<%= item.id %>/edit">
+            <i class="bi bi-pencil me-1"></i>Edit
+          </a>
+          <a class="btn btn-sm btn-outline-danger" href="/items/<%= item.id %>/delete">
+            <i class="bi bi-trash me-1"></i>Delete
+          </a>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-lg-5">
+      <div class="card border-0 shadow-sm h-100">
+        <div class="card-body">
+          <h2 class="h6 text-uppercase text-body-secondary mb-3">Quick stock update</h2>
+
+          <div class="d-flex gap-2 mb-3">
+            <!-- Separate one-field forms: a sale is one click, not a trip
+                 through the edit form where price could be clobbered. -->
+            <form action="/items/<%= item.id %>/stock" method="post">
+              <input type="hidden" name="delta" value="-1" />
+              <button class="btn btn-outline-danger" type="submit">
+                <i class="bi bi-dash-lg"></i> Sold 1
+              </button>
+            </form>
+
+            <form action="/items/<%= item.id %>/stock" method="post">
+              <input type="hidden" name="delta" value="1" />
+              <button class="btn btn-outline-success" type="submit">
+                <i class="bi bi-plus-lg"></i> Added 1
+              </button>
+            </form>
+          </div>
+
+          <form action="/items/<%= item.id %>/stock" method="post" class="row g-2">
+            <div class="col-12">
+              <label class="form-label small" for="delta">Custom change</label>
+            </div>
+            <div class="col-7">
+              <input
+                class="form-control"
+                type="number"
+                id="delta"
+                name="delta"
+                step="1"
+                placeholder="e.g. -12 or 24"
+                required
+              />
+            </div>
+            <div class="col-5 d-grid">
+              <button class="btn btn-secondary" type="submit">Apply</button>
+            </div>
+          </form>
+
+          <p class="form-text mb-0">
+            Negative for sales, positive for deliveries. Stock never goes below zero.
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+</main>
+
+<%- include('partials/footer') %>

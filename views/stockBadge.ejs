@@ -1,0 +1,14 @@
+<%
+  // Three states, decided once here instead of in every table row.
+  let stockClass = "text-bg-success";
+  let stockLabel = `${item.quantity} in stock`;
+
+  if (item.quantity === 0) {
+    stockClass = "text-bg-danger";
+    stockLabel = "Out of stock";
+  } else if (item.quantity <= item.low_stock_at) {
+    stockClass = "text-bg-warning";
+    stockLabel = `Low · ${item.quantity} left`;
+  }
+%>
+<span class="badge <%= stockClass %>"><%= stockLabel %></span>

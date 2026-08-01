@@ -1,0 +1,56 @@
+<%- include('partials/head') %>
+<%- include('partials/nav') %>
+
+<main class="container py-4">
+  <div class="row justify-content-center">
+    <div class="col-lg-7">
+      <h1 class="h3 mb-3">Delete <%= category.name %>?</h1>
+
+      <% if (items.length > 0) { %>
+        <!-- Spell out the FK behaviour rather than making the user guess
+             whether deleting a category wipes the stock with it. -->
+        <div class="alert alert-warning">
+          <p class="mb-2">
+            <%= items.length %> item(s) are in this category. They will be kept
+            and moved to <strong>no category</strong>, not deleted.
+          </p>
+          <ul class="mb-0 small ps-3">
+            <% items.slice(0, 5).forEach((item) => { %>
+              <li><%= item.name %></li>
+            <% }) %>
+            <% if (items.length > 5) { %>
+              <li>and <%= items.length - 5 %> more</li>
+            <% } %>
+          </ul>
+        </div>
+      <% } %>
+
+      <div class="card border-danger-subtle shadow-sm">
+        <div class="card-body">
+          <form action="/categories/<%= category.id %>/delete" method="post">
+            <div class="mb-3">
+              <label class="form-label" for="admin_password">Admin password</label>
+              <input
+                class="form-control"
+                type="password"
+                id="admin_password"
+                name="admin_password"
+                required
+                autocomplete="off"
+              />
+            </div>
+
+            <div class="d-flex gap-2">
+              <button class="btn btn-danger" type="submit">Delete category</button>
+              <a class="btn btn-outline-secondary" href="/categories/<%= category.id %>">
+                Cancel
+              </a>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</main>
+
+<%- include('partials/footer') %>

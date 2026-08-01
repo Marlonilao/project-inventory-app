@@ -1,0 +1,65 @@
+<%- include('partials/head') %>
+<%- include('partials/nav') %>
+
+<main class="container py-4">
+  <div class="d-flex flex-wrap justify-content-between align-items-center mb-4 gap-2">
+    <div>
+      <h1 class="h3 mb-0">Categories</h1>
+      <p class="text-body-secondary mb-0">Pick a category to see what's on the shelf.</p>
+    </div>
+
+    <a class="btn btn-primary" href="/categories/new">
+      <i class="bi bi-plus-lg me-1"></i>New category
+    </a>
+  </div>
+
+  <% if (categories.length === 0) { %>
+    <div class="card border-0 shadow-sm">
+      <div class="card-body text-center py-5">
+        <p class="text-body-secondary">No categories yet.</p>
+        <a class="btn btn-primary" href="/categories/new">Create the first one</a>
+      </div>
+    </div>
+  <% } else { %>
+    <div class="row row-cols-1 row-cols-sm-2 row-cols-lg-3 g-3">
+      <% categories.forEach((category) => { %>
+        <div class="col">
+          <div class="card h-100 border-0 shadow-sm">
+            <div class="card-body">
+              <div class="d-flex justify-content-between align-items-start gap-2">
+                <h2 class="h5 card-title mb-1"><%= category.name %></h2>
+                <span class="badge text-bg-light border">
+                  <%= category.item_count %>
+                </span>
+              </div>
+
+              <p class="card-text text-body-secondary small mb-0">
+                <%= category.description || 'No description.' %>
+              </p>
+            </div>
+
+            <div class="card-footer bg-transparent border-0 pt-0">
+              <a class="stretched-link small" href="/categories/<%= category.id %>">
+                View items <i class="bi bi-arrow-right"></i>
+              </a>
+            </div>
+          </div>
+        </div>
+      <% }) %>
+    </div>
+  <% } %>
+
+  <% if (uncategorized.length > 0) { %>
+    <!-- Only rendered when a category delete has orphaned something,
+         so these items never silently disappear from the app. -->
+    <div class="alert alert-warning mt-4 d-flex justify-content-between align-items-center">
+      <span>
+        <i class="bi bi-exclamation-triangle me-1"></i>
+        <%= uncategorized.length %> item(s) have no category.
+      </span>
+      <a class="btn btn-sm btn-outline-dark" href="/items">Review them</a>
+    </div>
+  <% } %>
+</main>
+
+<%- include('partials/footer') %>

@@ -1,0 +1,76 @@
+<%- include('partials/head') %>
+<%- include('partials/nav') %>
+
+<main class="container py-4">
+  <div class="d-flex flex-wrap justify-content-between align-items-center mb-4 gap-2">
+    <div>
+      <h1 class="h3 mb-0"><%= title %></h1>
+      <p class="text-body-secondary mb-0">
+        <%= items.length %> item(s)<% if (search) { %> matching "<%= search %>"<% } %>
+      </p>
+    </div>
+
+    <a class="btn btn-primary" href="/items/new">
+      <i class="bi bi-plus-lg me-1"></i>New item
+    </a>
+  </div>
+
+  <% if (items.length === 0) { %>
+    <div class="card border-0 shadow-sm">
+      <div class="card-body text-center py-5">
+        <% if (search) { %>
+          <p class="text-body-secondary mb-3">No item matches "<%= search %>".</p>
+          <a class="btn btn-outline-secondary" href="/items">Clear search</a>
+        <% } else { %>
+          <p class="text-body-secondary mb-3">Nothing here.</p>
+          <a class="btn btn-primary" href="/items/new">Add an item</a>
+        <% } %>
+      </div>
+    </div>
+  <% } else { %>
+    <div class="card border-0 shadow-sm">
+      <div class="table-responsive">
+        <table class="table table-hover align-middle mb-0">
+          <thead class="table-light">
+            <tr>
+              <th scope="col">Item</th>
+              <th scope="col">Category</th>
+              <th scope="col">Unit</th>
+              <th scope="col" class="text-end">Price</th>
+              <th scope="col">Stock</th>
+            </tr>
+          </thead>
+
+          <tbody>
+            <% items.forEach((item) => { %>
+              <tr>
+                <td>
+                  <a class="text-decoration-none fw-medium" href="/items/<%= item.id %>">
+                    <%= item.name %>
+                  </a>
+                </td>
+                <td>
+                  <% if (item.category_name) { %>
+                    <a
+                      class="badge text-bg-light border text-decoration-none"
+                      href="/categories/<%= item.category_id %>"
+                    >
+                      <%= item.category_name %>
+                    </a>
+                  <% } else { %>
+                    <span class="badge text-bg-secondary">Uncategorized</span>
+                  <% } %>
+                </td>
+                <td class="text-body-secondary"><%= item.unit %></td>
+                <td class="text-end"><%= peso(item.price) %></td>
+                <td><%- include('partials/stockBadge', { item }) %></td>
+              </tr>
+            <% }) %>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  <% } %>
+</main>
+
+<%- include('partials/footer') %>

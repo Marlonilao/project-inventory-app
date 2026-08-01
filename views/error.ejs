@@ -1,0 +1,18 @@
+<%
+  // Reached from handlers that do not always pass a title.
+  const pageTitle = typeof title !== "undefined" ? title : "Error";
+%>
+<%- include('partials/head', { title: pageTitle }) %>
+<%- include('partials/nav') %>
+
+<main class="container py-5">
+  <div class="row justify-content-center">
+    <div class="col-lg-6 text-center">
+      <i class="bi bi-exclamation-octagon display-4 text-body-secondary"></i>
+      <h1 class="h4 mt-3"><%= message %></h1>
+      <a class="btn btn-primary mt-3" href="/">Back to categories</a>
+    </div>
+  </div>
+</main>
+
+<%- include('partials/footer') %>
