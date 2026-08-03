@@ -16,6 +16,7 @@ async function homeGet(req, res) {
   const uncategorized = await db.getUncategorizedItems();
 
   res.render('index', { title: 'Inventory', categories, uncategorized });
+  console.log(process.env.DATABASE_URL);
 }
 
 async function categoryDetailGet(req, res) {
