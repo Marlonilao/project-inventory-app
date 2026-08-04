@@ -79,7 +79,10 @@ const main = async () => {
     process.exit(1);
   }
 
-  const client = new Client({ connectionString });
+  const client = new Client({
+    connectionString: process.argv[2],
+    ssl: { rejectUnauthorized: false },
+  });
 
   console.log('Populating database...');
 
